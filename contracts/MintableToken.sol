@@ -2,7 +2,7 @@ pragma solidity ^0.4.8;
 
 contract BasicERC20 {
     uint256 public totalSupply;
-    bool public allowTransfer;
+    bool public allowTransfer = true;
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);

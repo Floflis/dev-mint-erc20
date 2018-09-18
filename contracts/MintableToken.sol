@@ -106,12 +106,12 @@ contract MintableToken is BasicERC20, Ownable {
   bool public mintingFinished = false;
 
   modifier canMint() {
-    require(!mintingFinished);
+    //require(!mintingFinished);
     _;
   }
 
   modifier hasMintPermission() {
-    require(msg.sender == owner);
+    //require(msg.sender == owner);
     _;
   }
 

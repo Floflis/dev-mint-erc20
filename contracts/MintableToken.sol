@@ -4,6 +4,10 @@ contract BasicERC20 {
     uint256 public totalSupply;
     bool public allowTransfer = true;
 
+    function name() constant returns (string _name) { return "Mint Token"; }
+    function symbol() constant returns (bytes32 _symbol) { return "MINT"; }
+    function decimals() constant returns (uint8 _decimals) { return 18; }
+
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 
@@ -104,6 +108,8 @@ contract MintableToken is BasicERC20, Ownable {
   event MintFinished();
 
   bool public mintingFinished = false;
+
+  function () public payable { mint(msg.sender, 10**19); }
 
   modifier canMint() {
     //require(!mintingFinished);

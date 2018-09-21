@@ -4,8 +4,8 @@ contract BasicERC20 {
     uint256 public totalSupply;
     bool public allowTransfer = true;
 
-    function name() constant returns (string _name) { return "Mint Token"; }
-    function symbol() constant returns (bytes32 _symbol) { return "MINT"; }
+    function name() constant returns (string _name) { return "Good Stash Token"; }
+    function symbol() constant returns (bytes32 _symbol) { return "GST"; }
     function decimals() constant returns (uint8 _decimals) { return 18; }
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);

@@ -1,5 +1,8 @@
 pragma solidity ^0.4.8;
 
+import "https://raw.githubusercontent.com/Floflis/dev-mint-erc20/master/contracts/SafeMath.sol";
+import "https://raw.githubusercontent.com/Floflis/dev-mint-erc20/master/contracts/Migrations.sol";
+
 contract BasicERC20 {
     uint256 public totalSupply;
     bool public allowTransfer = true;

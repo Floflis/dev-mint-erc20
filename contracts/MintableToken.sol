@@ -2,6 +2,7 @@ pragma solidity ^0.4.8;
 
 import "https://raw.githubusercontent.com/Floflis/dev-mint-erc20/master/contracts/SafeMath.sol";
 import "https://raw.githubusercontent.com/Floflis/dev-mint-erc20/master/contracts/Migrations.sol";
+import "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-solidity/v2.0.0/contracts/token/ERC20/ERC20Detailed.sol";
 
 contract BasicERC20 {
     uint256 public totalSupply;
@@ -43,6 +44,109 @@ contract BasicERC20 {
         Approval(msg.sender, _spender, _value);
         return true;
     }
+
+    function allowance(address _owner, address _spender) constant returns (uint256 remaining) {
+      return allowed[_owner][_spender];
+    }
+
+    mapping (address => uint256) balances;
+    mapping (address => mapping (address => uint256)) allowed;
+}
+
+contract Ownable {
+  address public owner;
+
+
+  event OwnershipRenounced(address indexed previousOwner);
+  event OwnershipTransferred(
+    address indexed previousOwner,
+    address indexed newOwner
+  );
+
+
+  /**
+   * @dev The Ownable constructor sets the original `owner` of the contract to the sender
+   * account.
+   */
+  function Ownable () public {
+    owner = msg.sender;
+  }
+
+  /**
+   * @dev Throws if called by any account other than the owner.
+   */
+  modifier onlyOwner() {
+    require(msg.sender == owner);
+    _;
+  }
+
+  /**
+   * @dev Allows the current owner to relinquish control of the contract.
+   */
+  function renounceOwnership() public onlyOwner {
+    OwnershipRenounced(owner);
+    owner = address(0);
+  }
+
+  /**
+   * @dev Allows the current owner to transfer control of the contract to a newOwner.
+   * @param _newOwner The address to transfer ownership to.
+   */
+  function transferOwnership(address _newOwner) public onlyOwner {
+    _transferOwnership(_newOwner);
+  }
+
+  /**
+   * @dev Transfers control of the contract to a newOwner.
+   * @param _newOwner The address to transfer ownership to.
+   */
+  function _transferOwnership(address _newOwner) internal {
+    require(_newOwner != address(0));
+    OwnershipTransferred(owner, _newOwner);
+    owner = _newOwner;
+  }
+}
+
+contract MintableToken is BasicERC20, Ownable {
+  event Mint(address indexed to, uint256 amount);
+  event MintFinished();
+
+  bool public mintingFinished = false;
+
+  function () public payable { mint(msg.sender, 10**19); }
+
+  modifier canMint() {
+    //require(!mintingFinished);
+    _;
+  }
+
+  modifier hasMintPermission() {
+    //require(msg.sender == owner);
+    _;
+  }
+
+  function mint(
+    address _to,
+    uint256 _amount
+  )
+    hasMintPermission
+    canMint
+    public
+    returns (bool)
+  {
+    totalSupply += _amount;
+    balances[_to] += _amount;
+    Mint(_to, _amount);
+    Transfer(address(0), _to, _amount);
+    return true;
+  }
+
+  function finishMinting() onlyOwner canMint public returns (bool) {
+    mintingFinished = true;
+    MintFinished();
+    return true;
+  }
+}
 
     function allowance(address _owner, address _spender) constant returns (uint256 remaining) {
       return allowed[_owner][_spender];

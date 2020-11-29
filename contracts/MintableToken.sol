@@ -4,8 +4,8 @@ contract BasicERC20 {
     uint256 public totalSupply;
     bool public allowTransfer = true;
 
-    function name() constant returns (string _name) { return "Good Stash Token"; }
-    function symbol() constant returns (bytes32 _symbol) { return "GST"; }
+    function name() constant returns (string _name) { return "Pokémon Showdown Token"; }
+    function symbol() constant returns (bytes32 _symbol) { return "POKÉ"; }
     function decimals() constant returns (uint8 _decimals) { return 18; }
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
